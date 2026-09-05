@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  <title>彭城历史 · NFC触碰启动</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-cream: #f5f0e6;
+      --bg-parchment: #ece4d4;
+      --bg-warm: #f0e8d8;
+      --bg-card: #fffdf7;
+      --text-dark: #2c1810;
+      --text-body: #4a3728;
+      --text-muted: #8b7355;
+      --gold: #b8912e;
+      --gold-light: #d4af61;
+      --gold-pale: #f0e4c4;
+      --gold-deep: #8b6914;
+      --sepia: #5c3d2e;
+      --line: rgba(139,105,20,0.13);
+      --line-strong: rgba(139,105,20,0.30);
+      --shadow-soft: 0 2px 16px rgba(44,24,16,0.05);
+      --shadow-card: 0 4px 24px rgba(44,24,16,0.08);
+      --shadow-lg: 0 8px 40px rgba(44,24,16,0.12);
+      --radius: 14px;
+      --radius-sm: 10px;
+      --radius-lg: 20px;
+      --font-serif: "Noto Serif SC", "STSong", "SimSun", serif;
+      --font-sans: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 10%, rgba(212,175,97,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 90%, rgba(139,105,20,0.05) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== PAGE WRAPPER ===== */
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: var(--bg-cream);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      background: var(--text-dark);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .logo-mark::before {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid var(--gold-light);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .logo-mark::after {
+      content: '';
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: var(--gold);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .logo-text {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: 2px;
+      line-height: 1.2;
+    }
+
+    .logo-en {
+      font-size: 7px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-item {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: all 0.3s;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-item:hover { color: var(--gold-deep); background: var(--gold-pale); }
+
+    .nfc-pill {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 12px;
+      background: var(--bg-parchment);
+      border: 1px solid var(--line-strong);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gold-deep);
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-left: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .nfc-pill:hover { background: var(--gold-pale); }
+
+    .header-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--bg-parchment);
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      margin-left: 6px;
+      cursor: pointer;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      padding: 24px 20px 28px;
+      overflow: hidden;
+    }
+
+    .hero-bg-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.035;
+      background-image:
+        radial-gradient(circle, var(--gold-deep) 1px, transparent 1px);
+      background-size: 30px 30px;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .hero-left { flex: 1; padding-top: 8px; }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--text-dark);
+      line-height: 1.3;
+      letter-spacing: 3px;
+      margin-bottom: 6px;
+    }
+
+    .hero-title .accent { color: var(--gold-deep); }
+
+    .hero-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      margin-bottom: 18px;
+    }
+
+    /* Feature Icons Row */
+    .hero-features {
+      display: flex;
+      gap: 14px;
+    }
+
+    .hero-feature {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-feature-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--bg-card);
+      border: 1px solid var(--line-strong);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.3s;
+    }
+
+    .hero-feature:hover .hero-feature-icon { transform: scale(1.05); }
+
+    .hero-feature-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    /* Phone Mockup */
+    .hero-phone-area {
+      flex-shrink: 0;
+      width: 130px;
+      position: relative;
+    }
+
+    .phone-frame {
+      width: 130px;
+      height: 240px;
+      background: linear-gradient(145deg, #3a2a1a 0%, #1a1209 100%);
+      border-radius: 20px;
+      border: 2px solid rgba(184,145,46,0.2);
+      box-shadow: 0 10px 36px rgba(26,18,9,0.22);
+      position: relative;
+      overflow: hidden;
+      padding: 10px 7px;
+    }
+
+    .phone-notch {
+      width: 44px;
+      height: 4px;
+      background: #1a1209;
+      border-radius: 2px;
+      margin: 0 auto 8px;
+    }
+
+    .phone-screen {
+      width: 100%;
+      flex: 1;
+      background: linear-gradient(180deg, #ede6d8 0%, #f5f0e6 100%);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 6px;
+    }
+
+    .phone-screen-logo {
+      width: 22px;
+      height: 22px;
+      background: var(--text-dark);
+      border-radius: 6px;
+      position: relative;
+      margin-bottom: 3px;
+    }
+
+    .phone-screen-logo::before {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border: 1px solid var(--gold-light);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .phone-screen-logo::after {
+      content: '';
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--gold);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .phone-screen-title {
+      font-family: var(--font-serif);
+      font-size: 8px;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: 2px;
+    }
+
+    .phone-screen-icon { font-size: 16px; opacity: 0.6; }
+
+    .phone-screen-btn {
+      font-size: 7px;
+      color: var(--text-muted);
+      padding: 2px 8px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+    }
+
+    /* Signal waves around phone */
+    .phone-waves {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .p-wave {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(184,145,46,0.2);
+      animation: pWave 3s ease-out infinite;
+    }
+
+    .p-wave:nth-child(1) { width: 130px; height: 130px; animation-delay: 0s; }
+    .p-wave:nth-child(2) { width: 170px; height: 170px; animation-delay: 0.8s; }
+    .p-wave:nth-child(3) { width: 210px; height: 210px; animation-delay: 1.6s; }
+
+    @keyframes pWave {
+      0% { opacity: 0.5; transform: scale(0.9); }
+      100% { opacity: 0; transform: scale(1.15); }
+    }
+
+    /* NFC floating card */
+    .nfc-float {
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 8px 12px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--line);
+      z-index: 2;
+      min-width: 90px;
+    }
+
+    .nfc-float-icon { text-align: center; font-size: 18px; margin-bottom: 3px; }
+
+    .nfc-float-text {
+      font-size: 9px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .nfc-float-text strong {
+      display: block;
+      font-size: 11px;
+      color: var(--text-dark);
+      font-weight: 700;
+    }
+
+    /* ===== NFC DETECT CARD ===== */
+    .nfc-detect-card {
+      background: var(--bg-card);
+      margin: 0 16px;
+      border-radius: var(--radius-lg);
+      padding: 28px 20px 24px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--line);
+      text-align: center;
+    }
+
+    /* NFC signal animation */
+    .nfc-visual {
+      position: relative;
+      width: 88px;
+      height: 88px;
+      margin: 0 auto 18px;
+    }
+
+    .nfc-signal-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1.5px solid var(--gold);
+      animation: nfcRing 3s ease-out infinite;
+    }
+
+    .nfc-signal-ring:nth-child(1) { width: 36px; height: 36px; animation-delay: 0s; }
+    .nfc-signal-ring:nth-child(2) { width: 58px; height: 58px; animation-delay: 0.6s; }
+    .nfc-signal-ring:nth-child(3) { width: 80px; height: 80px; animation-delay: 1.2s; }
+
+    @keyframes nfcRing {
+      0% { opacity: 0.6; transform: translate(-50%,-50%) scale(0.9); }
+      100% { opacity: 0; transform: translate(-50%,-50%) scale(1.15); }
+    }
+
+    .nfc-center-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 28px;
+      z-index: 1;
+    }
+
+    .nfc-status {
+      font-family: var(--font-serif);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .nfc-status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: dotPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes dotPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .nfc-status-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+
+    /* Steps */
+    .detect-steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .d-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .d-step-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg-parchment);
+      border: 2px solid var(--line-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      transition: all 0.5s;
+    }
+
+    .d-step.active .d-step-circle {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: white;
+      animation: stepPop 1.2s ease-in-out infinite;
+    }
+
+    @keyframes stepPop {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(184,145,46,0.4); }
+      50% { box-shadow: 0 0 0 5px rgba(184,145,46,0); }
+    }
+
+    .d-step.done .d-step-circle {
+      background: var(--green-soft, #6b8f4e);
+      border-color: var(--green-soft, #6b8f4e);
+      color: white;
+    }
+
+    .d-step-label { font-size: 9px; color: var(--text-muted); transition: color 0.5s; }
+    .d-step.active .d-step-label,
+    .d-step.done .d-step-label { color: var(--text-dark); font-weight: 600; }
+
+    .d-line {
+      width: 24px;
+      height: 2px;
+      background: var(--line-strong);
+      margin-bottom: 16px;
+      transition: background 0.5s;
+    }
+
+    .d-line.done { background: var(--green-soft, #6b8f4e); }
+
+    /* Device info */
+    .device-info-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      font-size: 10px;
+      color: var(--text-muted);
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    /* CTA */
+    .cta-area { margin-top: 20px; }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--text-dark);
+      color: var(--gold-light);
+      font-family: var(--font-serif);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      padding: 13px 34px;
+      border-radius: 50px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(26,18,9,0.25);
+      transition: all 0.3s;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(26,18,9,0.35);
+    }
+
+    .cta-btn:active { transform: scale(0.97); }
+
+    .cta-sub {
+      display: block;
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      letter-spacing: 1px;
+    }
+
+    .auto-timer {
+      display: none;
+      font-size: 10px;
+      color: var(--gold-deep);
+      margin-top: 6px;
+      letter-spacing: 1px;
+    }
+
+    .auto-timer.show { display: block; }
+
+    /* Tips */
+    .tips-area {
+      background: var(--bg-parchment);
+      border: 1px dashed var(--line-strong);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      margin-top: 18px;
+    }
+
+    .tips-title {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .tips-text {
+      font-size: 10px;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    /* ===== FOOTER ===== */
+    .page-footer {
+      text-align: center;
+      padding: 20px 16px;
+      font-size: 9px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--line);
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .footer-brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin-bottom: 6px;
+    }
+
+    .footer-logo {
+      width: 18px;
+      height: 18px;
+      background: var(--text-dark);
+      border-radius: 5px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .footer-logo::before {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border: 1px solid var(--gold-light);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .footer-logo::after {
+      content: '';
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: var(--gold);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .footer-brand-text {
+      font-family: var(--font-serif);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: 2px;
+    }
+
+    .footer-nfc-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      margin-top: 8px;
+      font-size: 9px;
+      color: var(--text-muted);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 480px) {
+      .hero-content { flex-direction: column; text-align: center; }
+      .hero-features { justify-content: center; }
+      .hero-phone-area { margin-top: 12px; }
+      .hero-title { font-size: 22px; }
+      .nfc-float { right: 50%; transform: translate(50%, -50%); top: auto; bottom: -8px; }
+    }
+
+    ::-webkit-scrollbar { width: 0; height: 0; }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ===== HEADER ===== -->
+  <header class="header">
+    <a class="header-left" href="index.html">
+      <div class="logo-mark"></div>
+      <div>
+        <div class="logo-text">彭城历史</div>
+        <div class="logo-en">PENGCHENG HISTORY</div>
+      </div>
+    </a>
+    <nav class="header-nav">
+      <a class="nav-item" href="index.html">首页</a>
+      <a class="nav-item" href="index.html">彭城七里</a>
+      <a class="nav-item" href="index.html">历史文脉</a>
+      <a class="nav-item" href="index.html">彭城美食</a>
+      <a class="nav-item" href="index.html">互动地图</a>
+      <div class="nfc-pill">
+        <span>📡</span> NFC感应区
+      </div>
+      <div class="header-avatar">👤</div>
+    </nav>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-content">
+      <div class="hero-left">
+        <h1 class="hero-title">一触<span class="accent">彭城</span> · 千年文脉</h1>
+        <p class="hero-subtitle">NFC互动 · 探索彭城历史与文化</p>
+        <div class="hero-features">
+          <div class="hero-feature">
+            <div class="hero-feature-icon">📡</div>
+            <div class="hero-feature-label">NFC触碰<br>启动</div>
+          </div>
+          <div class="hero-feature">
+            <div class="hero-feature-icon">🏛️</div>
+            <div class="hero-feature-label">景点语音<br>导览</div>
+          </div>
+          <div class="hero-feature">
+            <div class="hero-feature-icon">📖</div>
+            <div class="hero-feature-label">历史文化<br>解读</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-phone-area">
+        <div class="phone-waves">
+          <div class="p-wave"></div>
+          <div class="p-wave"></div>
+          <div class="p-wave"></div>
+        </div>
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-screen-logo"></div>
+            <div class="phone-screen-title">彭城历史</div>
+            <div class="phone-screen-icon">📡</div>
+            <div class="phone-screen-btn">进入探索</div>
+          </div>
+        </div>
+        <div class="nfc-float">
+          <div class="nfc-float-icon">📡</div>
+          <div class="nfc-float-text">
+            请将手机靠近<br><strong>NFC感应区</strong><br>开启彭城之旅
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NFC DETECT CARD ===== -->
+  <div class="nfc-detect-card">
+
+    <!-- NFC Signal -->
+    <div class="nfc-visual">
+      <div class="nfc-signal-ring"></div>
+      <div class="nfc-signal-ring"></div>
+      <div class="nfc-signal-ring"></div>
+      <div class="nfc-center-icon">🏯</div>
+    </div>
+
+    <div class="nfc-status">
+      <div class="nfc-status-dot" id="statusDot"></div>
+      <span id="statusText">等待触碰 NFC 标签...</span>
+    </div>
+    <div class="nfc-status-sub" id="statusSub">将手机靠近手指陀螺上的 NFC 标签</div>
+
+    <!-- Steps -->
+    <div class="detect-steps">
+      <div class="d-step active" id="dstep1">
+        <div class="d-step-circle">1</div>
+        <div class="d-step-label">触碰标签</div>
+      </div>
+      <div class="d-line" id="dline1"></div>
+      <div class="d-step" id="dstep2">
+        <div class="d-step-circle">2</div>
+        <div class="d-step-label">识别成功</div>
+      </div>
+      <div class="d-line" id="dline2"></div>
+      <div class="d-step" id="dstep3">
+        <div class="d-step-circle">3</div>
+        <div class="d-step-label">打开攻略</div>
+      </div>
+    </div>
+
+    <div class="device-info-row" id="deviceInfoRow">
+      <span id="deviceType">📱 检测中...</span>
+      <span id="nfcSupport">🔋 检测中...</span>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-area">
+      <a href="index.html" class="cta-btn" id="ctaBtn">
+        <span id="ctaIcon">🗺️</span>
+        <span id="ctaText">进入彭城</span>
+      </a>
+      <span class="cta-sub" id="ctaSub">点击或触碰 NFC 标签自动跳转</span>
+      <div class="auto-timer" id="autoTimer">⏱ <span id="autoSec">3</span>秒后自动打开...</div>
+    </div>
+
+    <!-- Tips -->
+    <div class="tips-area">
+      <div class="tips-title">💡 使用说明</div>
+      <div class="tips-text">
+        将手机触碰手指陀螺上的 NFC 标签<br>
+        即可自动打开徐州旅游攻略页面<br>
+        <span style="color:var(--gold-deep)">iOS 13+ / Android 10+ 支持 NFC 标签读取</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="page-footer">
+    <div class="footer-brand-row">
+      <div class="footer-logo"></div>
+      <span class="footer-brand-text">彭城历史</span>
+    </div>
+    <div style="font-size:9px;color:var(--text-muted);letter-spacing:1px;">一触彭城 · 千年文脉 &nbsp;|&nbsp; NFC互动探索彭城历史与文化</div>
+    <div style="margin-top:6px;font-size:8px;color:var(--text-muted);opacity:0.7;">© 2026 彭城七里文创项目 · 徐州</div>
+    <div class="footer-nfc-row">
+      <span>📡</span> NFC感应区 &nbsp;·&nbsp; 请将手机靠近感应区
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  const ua = navigator.userAgent;
+  const isIOS = /iPhone|iPad|iPod/.test(ua);
+  const isAndroid = /Android/.test(ua);
+  const isMobile = isIOS || isAndroid;
+
+  document.getElementById('deviceType').textContent = isIOS ? '📱 iPhone' : isAndroid ? '📱 Android' : '🖥 桌面端';
+  document.getElementById('nfcSupport').textContent = isMobile ? '✅ 支持NFC' : '⚠️ 需移动端';
+
+  let nfcDetected = false;
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('nfc') === '1') {
+    nfcDetected = true;
+    onNFCDetected();
+  }
+
+  if ('NDEFReader' in window && isAndroid) {
+    initWebNFC();
+  }
+
+  if (document.referrer && (
+    document.referrer.includes('nfc') ||
+    document.referrer.includes('彭城') ||
+    document.referrer.includes('xuzhou')
+  )) {
+    nfcDetected = true;
+    onNFCDetected();
+  }
+
+  function initWebNFC() {
+    const ndef = new NDEFReader();
+    ndef.scan().then(() => {
+      ndef.onreading = event => {
+        const decoder = new TextDecoder();
+        let message = '';
+        for (const record of event.message.records) {
+          if (record.contentType === 'text' || record.contentType === 'url') {
+            message = decoder.decode(record.data);
+          }
+        }
+        if (message) {
+          nfcDetected = true;
+          onNFCDetected(message);
+        }
+      };
+      ndef.onreadingerror = () => {};
+    }).catch(() => {});
+  }
+
+  function onNFCDetected(tagContent) {
+    document.getElementById('statusDot').style.background = '#6b8f4e';
+    document.getElementById('statusText').textContent = 'NFC 标签已识别！';
+    document.getElementById('statusSub').textContent = '正在为您开启彭城之旅...';
+    document.getElementById('dstep1').classList.remove('active');
+    document.getElementById('dstep1').classList.add('done');
+    document.getElementById('dline1').classList.add('done');
+    document.getElementById('dstep2').classList.add('active');
+    setTimeout(() => {
+      document.getElementById('dstep2').classList.remove('active');
+      document.getElementById('dstep2').classList.add('done');
+      document.getElementById('dline2').classList.add('done');
+      document.getElementById('dstep3').classList.add('active');
+      document.getElementById('dstep3').classList.remove('active');
+      document.getElementById('dstep3').classList.add('done');
+    }, 500);
+
+    if (tagContent) document.getElementById('ctaText').textContent = '进入攻略';
+
+    const timerEl = document.getElementById('autoTimer');
+    const secEl = document.getElementById('autoSec');
+    timerEl.classList.add('show');
+    let sec = 3;
+    const ti = setInterval(() => {
+      sec--;
+      secEl.textContent = sec;
+      if (sec <= 0) {
+        clearInterval(ti);
+        window.location.href = 'index.html?nfc=1&tab=attractions&filter=all';
+      }
+    }, 1000);
+  }
+
+  const currentPath = window.location.pathname;
+  if (currentPath.includes('nfc-start') || currentPath.includes('nfc')) {
+    setTimeout(() => {
+      window.location.href = 'index.html?nfc=1&tab=attractions&filter=all';
+    }, 3000);
+  }
+
+  let tapCount = 0;
+  const handleTap = () => {
+    tapCount++;
+    if (tapCount >= 5) {
+      tapCount = 0;
+      onNFCDetected('彭城七里');
+    }
+  };
+  document.addEventListener('touchstart', handleTap);
+  document.addEventListener('click', handleTap);
+
+  let seconds = 5;
+  const timer = setInterval(() => {
+    seconds--;
+    if (seconds <= 0) {
+      clearInterval(timer);
+      window.location.href = 'index.html?nfc=1&tab=attractions&filter=all';
+    }
+  }, 1000);
+})();
+</script>
+</body>
+</html>
