@@ -606,7 +606,7 @@
     </div>
     <div class="feature-banners">
       <div class="feature-banner animate-in" onclick="switchTab('itinerary')">
-        <img class="feature-banner-img" src="图片/云龙山.jpg" onerror="this.style.background='linear-gradient(135deg, #ece4d4, #f0e4c4)'">
+        <img class="feature-banner-img" src="图片/云龙山.jpg" onerror="this.style.background='linear-gradient(135deg, #ece4d4, #f0e4c4)'" loading="lazy">
         <div class="feature-banner-body">
           <div class="feature-banner-title">🗺️ 互动地图</div>
           <div class="feature-banner-desc">探索彭城名胜古迹，一键导航</div>
@@ -614,7 +614,7 @@
         </div>
       </div>
       <div class="feature-banner animate-in" onclick="switchTab('attractions')">
-        <img class="feature-banner-img" src="图片/徐州博物馆.jpg" onerror="this.style.background='linear-gradient(135deg, #ece4d4, #f0e4c4)'">
+        <img class="feature-banner-img" src="图片/徐州博物馆.jpg" onerror="this.style.background='linear-gradient(135deg, #ece4d4, #f0e4c4)'" loading="lazy">
         <div class="feature-banner-body">
           <div class="feature-banner-title">📖 历史文脉</div>
           <div class="feature-banner-desc">了解彭城千年历史，两汉文化瑰宝</div>
@@ -736,8 +736,8 @@ const attractions = [
   },  {
     id:2, name:'云龙湖', tag:'自然风光', category:'nature',
     rating:4.8, address:'云龙区奎中路',
-    img: IMG_BASE + '云龙湖.png',
-    coverImg: IMG_BASE + '云龙湖.png',
+    img: IMG_BASE + '云龙湖.jpg',
+    coverImg: IMG_BASE + '云龙湖.jpg',
     brief:'国家5A级景区，徐州的灵魂湖泊，有"西湖"之秀、"太湖"之阔。',
     history:'云龙湖又名"龙山湖"，因形似游龙而得名。始建于1958年，是人工修建的大型湖泊风景区。湖中有孤山、小南湖、里运河等景观，湖面面积12.7平方公里。2015年被评为国家5A级旅游景区，是徐州城市名片。',
     significance:'云龙湖承载着两千年的楚汉文化记忆。苏东坡任徐州知府时曾在此治水防洪，留下"彭城宴罢客归来，盏盏流光劝举杯"的佳话。湖区的放鹤亭、临孝女墓等古迹，见证着徐州作为两汉文化发源地的深厚底蕴。',
@@ -772,8 +772,8 @@ const attractions = [
   {
     id:5, name:'户部山古建筑群', tag:'历史古迹', category:'historical',
     rating:4.5, address:'云龙区户部山街',
-    img: IMG_BASE + '户部山.png',
-    coverImg: IMG_BASE + '户部山.png',
+    img: IMG_BASE + '户部山.jpg',
+    coverImg: IMG_BASE + '户部山.jpg',
     brief:'"徐州富庶甲齐鲁"之地，明清古建筑群保存最完整的历史文化街区。',
     history:'户部山又名南山，因山上多居住明代户部官员而得名，素有"彭城第一山"之称。有"穷北关，富南关，有钱都住户部山"之说。现存古建筑群以乾隆皇帝下榻的"马园"和百年宅院"李厅"为代表。',
     significance:'户部山是徐州明清时期商业繁荣和文化积淀的缩影，见证了清代漕运文化和盐商文化的交融，是徐州城市记忆的活化石。',
@@ -845,57 +845,57 @@ const attractions = [
 
 const foods = [
   { id:101, name:'徐州地锅鸡', tag:'经典菜肴', category:'dish',
-    img: IMG_BASE + '地锅鸡.png',
+    img: IMG_BASE + '地锅鸡.jpg',
     brief:'徐州最具代表性的硬菜，铁锅柴火慢炖，鸡肉鲜嫩入味，锅边玉米饼吸满汤汁。',
     shop:'老味地锅鸡', address:'云龙区复兴北路近云龙湖', price:'80-120元', rating:4.7,
     tips:'建议2-3人 sharing，选土公鸡更入味。饼一定要等10分钟后再揭。' },
   { id:102, name:'徐州烧烤', tag:'特色小吃', category:'snack',
-    img: IMG_BASE + '徐州烧烤.png',
+    img: IMG_BASE + '徐州烧烤.jpg',
     brief:'徐州是中国烧烤之都，羊肉串、实蛋、烤饼是标配。孜然辣椒是灵魂。',
     shop:'老味烧烤', address:'云龙区云龙湖周边多条街区', price:'人均50-80元', rating:4.8,
     tips:'徐州烧烤必点：羊肉串、实蛋、烤饼、蒜爆鱼。凌晨2点还在排队才是正宗。' },
   { id:103, name:'徐州羊肉汤', tag:'早餐推荐', category:'breakfast',
-    img: IMG_BASE + '徐州羊汤.png',
+    img: IMG_BASE + '徐州羊汤.jpg',
     brief:'汤色乳白、鲜而不膻，大火熬制数小时，肉质软烂。徐州人的"晨间信仰"。',
     shop:'方窑羊肉汤', address:'泉山区方窑小区附近', price:'15-25元', rating:4.8,
     tips:'加蒜泥+辣椒油+香醋，是徐州人的标准吃法。配刚出炉的烧饼。' },
   { id:104, name:'把子肉', tag:'特色小吃', category:'snack',
-    img: IMG_BASE + '徐州把子肉.png',
+    img: IMG_BASE + '徐州把子肉.jpg',
     brief:'五花肉切条卤制，肥而不腻、入口即化。酱香浓郁，配米饭是"灵魂饭"。',
     shop:'老味把子肉', address:'云龙区彭城路商业步行街', price:'15-30元', rating:4.5,
     tips:'加个炸蛋和青菜，浇上肉汤拌饭，是徐州人最满足的一餐。' },
   { id:105, name:'蒜爆鱼', tag:'经典菜肴', category:'dish',
-    img: IMG_BASE + '蒜爆鱼.png',
+    img: IMG_BASE + '蒜爆鱼.jpg',
     brief:'徐州经典红烧鱼做法，大量蒜瓣爆香后烧制，鱼肉鲜嫩、蒜香浓郁。',
     shop:'老味鲁菜馆', address:'鼓楼区彭城路一带', price:'60-90元', rating:4.6,
     tips:'必点鲤鱼或草鱼，蒜要放够量，鱼要现杀现做才鲜嫩。' },
   { id:106, name:'饣它汤', tag:'早餐推荐', category:'breakfast',
-    img: IMG_BASE + '饣它汤.png',
+    img: IMG_BASE + '饣它汤.jpg',
     brief:'用鸡肉、香菇、面粉慢熬成稠汤，浓稠鲜美，是徐州独有的早餐经典。',
     shop:'老味饣它汤', address:'鼓楼区户部山街', price:'10-15元', rating:4.4,
     tips:'"饣它"读shá，意思是"吃"。这是徐州独有的早餐，外地吃不到正宗的。' },
   { id:107, name:'烙馍馓子', tag:'早餐推荐', category:'breakfast',
-    img: IMG_BASE + '烙馍馓子.png',
+    img: IMG_BASE + '烙馍馓子.jpg',
     brief:'徐州经典早餐组合，薄饼卷上酥脆馓子，蘸汤或配豆浆，口感层次丰富。',
     shop:'街头早点摊', address:'徐州各区街头巷尾', price:'5-10元', rating:4.3,
     tips:'现烙的烙馍最香，馓子要选粗馓子更脆。搭配一碗辣汤是标配。' },
   { id:108, name:'蜜三刀', tag:'传统点心', category:'snack',
-    img: IMG_BASE + '蜜三刀.png',
+    img: IMG_BASE + '蜜三刀.jpg',
     brief:'徐州传统糕点，表面三刀切口，浇上糖浆，外脆内软、甜而不腻。',
     shop:'徐州老字号糕点铺', address:'鼓楼区民主路、彭城路一带', price:'15-30元', rating:4.3,
     tips:'配茶吃最佳，是徐州人走亲访友的伴手礼。趁新鲜吃。' },
   { id:109, name:'煎包', tag:'早餐推荐', category:'breakfast',
-    img: IMG_BASE + '煎包.png',
+    img: IMG_BASE + '煎包.jpg',
     brief:'底部金黄酥脆，外皮暄软有嚼劲，内馅多汁不柴。徐州人清晨的"第一口满足"。',
     shop:'朝天锅煎包', address:'鼓楼区中山北路近彭城广场', price:'3-5元', rating:4.6,
     tips:'早起去排长队那家最好吃，一般7点前到。配一碗羊肉汤是地道吃法。' },
   { id:110, name:'徐州米线', tag:'特色小吃', category:'snack',
-    img: IMG_BASE + '徐州米线.png',
+    img: IMG_BASE + '徐州米线.jpg',
     brief:'徐州人离不开的街头美味，汤底浓郁鲜香，米线爽滑有弹性。',
     shop:'三毛米线', address:'鼓楼区彭城广场附近', price:'12-20元', rating:4.4,
     tips:'加份鸡杂或牛肉更满足，辣度可选。徐州米线偏辣。' },
   { id:111, name:'捆蹄', tag:'经典菜肴', category:'dish',
-    img: IMG_BASE + '捆蹄.png',
+    img: IMG_BASE + '捆蹄.jpg',
     brief:'丰县非遗美食，猪蹄去骨后捆扎卤制，皮脆肉嫩、酱香浓郁。',
     shop:'丰县捆香蹄专卖店', address:'丰县城区（可网购邮寄）', price:'45-68元', rating:4.6,
     tips:'真空包装可邮寄，是极佳的徐州伴手礼。' }
@@ -1087,7 +1087,7 @@ function openAttractionModal(id) {
   const distText = getDist(id);
   const tipsHtml = a.tips.map(t => `<div class="modal-tip-item">💡 ${t}</div>`).join('');
   document.getElementById('modalBody').innerHTML = `
-    <img class="modal-img" src="${a.coverImg}" alt="${a.name}" onerror="this.src='https://images.unsplash.com/photo-1591109079753-ffa41de4413c?w=800&q=80'">
+    <img class="modal-img" src="${a.coverImg}" alt="${a.name}" onerror="this.src='https://images.unsplash.com/photo-1591109079753-ffa41de4413c?w=800&q=80'" loading="lazy">
     <div class="modal-body">
       <span class="modal-tag">${a.tag}</span>
       <h2 class="modal-name">${a.name}</h2>
@@ -1124,7 +1124,7 @@ function openFoodModal(id) {
   const f = foods.find(x => x.id === id);
   if (!f) return;
   document.getElementById('modalBody').innerHTML = `
-    <img class="modal-img" src="${f.img}" alt="${f.name}" style="height:170px" onerror="this.src='https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80'">
+    <img class="modal-img" src="${f.img}" alt="${f.name}" style="height:170px" onerror="this.src='https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80'" loading="lazy">
     <div class="modal-body">
       <span class="modal-tag">${f.tag}</span>
       <h2 class="modal-name">${f.name}</h2>
